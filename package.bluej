@@ -11,10 +11,17 @@ dependency3.type=UsesDependency
 objectbench.height=76
 objectbench.width=311
 package.editor.height=602
+<<<<<<< HEAD
+package.editor.width=212
+package.editor.x=456
+package.editor.y=18
+package.numDependencies=2
+=======
 package.editor.width=213
 package.editor.x=-7
 package.editor.y=0
 package.numDependencies=3
+>>>>>>> origin/master
 package.numTargets=4
 package.showExtends=true
 package.showUses=true

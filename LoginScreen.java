@@ -38,6 +38,10 @@ public class LoginScreen
     //info being read
     private String username;
     private String password;
+    private Account myAccount;
+    private Account testerAccount;
+    
+    int count = 0;
     
     /**
      * @title LoginScreen() Constructor
@@ -50,6 +54,8 @@ public class LoginScreen
         loginButton.setActionCommand("login");
         createFrame();
         packFrame();
+        myAccount = null;
+        testerAccount = new Account();
     }
     
     /**
@@ -140,6 +146,51 @@ public class LoginScreen
         //System.out.println("Nice");
         username = usernameField.getText();
         password = passwordField.getText();
-        System.out.println(username + "\n" + password);
+        //System.out.println(username+"   "+password);
+        checkInfo();
+    }
+    
+    private void checkInfo()
+    {
+        //if(testerAccount.checkAccount(username, password))//if the entered account exists
+        {
+            /*
+             * log into main client
+             */
+        }
+        //else//if the entered account doesn't exist
+        {
+            /*
+             * tell user account doesn't exist (pop-up window)
+             */
+            JFrame newFrame;
+            Dimension screenSize;
+            Container errorContent;
+            JLabel instructions = new JLabel("ONo!, that account does not exist!", JLabel.CENTER);
+    
+            
+            JPanel notExist = new JPanel();
+            notExist.setLayout(new FlowLayout());
+            
+            instructions.setBounds(100, 10, 100, 25);
+    
+            // Frame Stuff
+            newFrame = new JFrame("ONo!");
+            screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            
+            newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            newFrame.setPreferredSize(new Dimension(200, 150));
+            newFrame.setMinimumSize(new Dimension(200, 150));
+            newFrame.setMaximumSize(new Dimension(200, 150));
+            newFrame.setLocation(screenSize.width / 2 - 150, screenSize.height / 2 - 250);
+            errorContent = newFrame.getContentPane();
+            errorContent.setLayout(new BorderLayout());
+            
+            // Add to the "Login" pane
+            notExist.add(instructions);
+            
+            newFrame.pack();
+            newFrame.setVisible(true);
+        }
     }
 }

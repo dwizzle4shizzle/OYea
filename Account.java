@@ -41,30 +41,47 @@ public class Account
         myEmail = "";
         myPassword = "";
         myProfilePic = "";
-        myActNum = getEmail().hashCode();
+        myActNum = getActNum();
         myRequests = new LinkedList<Account>();
         isOnline = false;
         friendList = new ArrayList();
         messages = new ArrayList();
-        saveAll();
+        //saveAll();
     }
     
     /**
      * Basic constructor, requires at least an email so that a row on the database can be created for the rest
      * of this user's info can be loaded in the correct spot.
      */
-    public Account(String email)
+    public Account(String email, String pass)
     {
-        myName = "";
         myEmail = email;
-        myPassword = "";
-        myProfilePic = "";
-        myActNum = getEmail().hashCode();
-        myRequests = new LinkedList<Account>();
-        isOnline = false;
-        friendList = new ArrayList();
-        messages = new ArrayList();
-        saveAll();
+        myPassword = pass;
+        if(checkAccount(email, pass) == false)//if the account doesnt exist
+        {
+            saveNewAct();
+            myName = "";
+            myProfilePic = "";
+            myActNum = getActNum();
+            myRequests = new LinkedList<Account>();
+            isOnline = false;
+            friendList = new ArrayList();
+            messages = new ArrayList();
+        }   
+        else//if the acount does exist
+        {
+            Account temp = getDBInfo(getActNum());
+            myName = temp.getName();
+            myProfilePic = temp.getProfilePic();
+            myActNum = getActNum();
+            myRequests = new LinkedList<Account>();
+            isOnline = false;
+            friendList = new ArrayList();
+            messages = new ArrayList();
+            //saveAll();
+        }
+
+            
     }
     
     /**
@@ -81,7 +98,7 @@ public class Account
         myEmail = email;
         myPassword = pass;
         myProfilePic = pic;
-        myActNum = getEmail().hashCode();
+        myActNum = getActNum();
         isOnline = false;
         friendList = new ArrayList();
         messages = new ArrayList();
@@ -94,7 +111,7 @@ public class Account
      * 
      * @return  myActNum    This account's email converted to a hash code with String.hashCode().
      */
-    public int getActNum(){return myActNum;}
+    public int getActNum(){return myEmail.hashCode()/10000000;}
 
     /**
      * Accessor method for the user's name.
@@ -189,7 +206,7 @@ public class Account
     public ArrayList getFriendList()
     {
         ArrayList newFriendList = new ArrayList();
-        newFriendList.add(new Account(""));
+        newFriendList.add(new Account());
         
         //load accounts into the new list
         for(int x = 0; x < friendList.size(); x++)
@@ -221,60 +238,10 @@ public class Account
     
     //database interaction methods
     /**
-     * Checks if an account exists in the database.
-     * 
-     * @param   pass    The password to be checked.
-     *          email   The username to be checked.
-     * @return  isAct   True if the account exists, false if not.          
-     */
-    public boolean checkAccount(String email, String pass)
-    {
-        ResultSet emailResult;
-        ResultSet passResult;
-        boolean isAct = false;
-        //save info in this Account to the database
-        try
-        {
-            Class.forName(driver).newInstance();
-            Connection conn = DriverManager.getConnection(url+database,username,password);
-            Statement state = conn.createStatement();
-            emailResult = state.executeQuery("SELECT Email FROM Accounts WHERE Email="+email+";");
-            passResult = state.executeQuery("SELECT Password FROM Accounts WHERE Password="+pass+";");
-            
-            if(emailResult.getString(1) == email && passResult.getString(1) == pass)//if the accounts already exists in the database
-            {
-               isAct = true;
-            }
-            
-            else//if a new account needs to be entered into the database
-            {
-                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
-                                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
-            }
-            conn.close();
-        }
-        catch(SQLException se)
-        {
-            while(se != null)
-            {
-                System.out.println( "State  : " + se.getSQLState()) ;
-                System.out.println( "Message: " + se.getMessage()) ;
-                System.out.println( "Error  : " + se.getErrorCode()) ;
-                se = se.getNextException();
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-        
-        return isAct;
-    }
-    
-    /**
      * Reads info from database and assembles it into a complete account object.
      * 
-     * @return  newAct  The account being assembled form the database info.
+     * @param   localNum    The account number who's info is being loaded.
+     * @return  newAct      The account being assembled form the database info.
      */
     private Account getDBInfo(int localNum)
     {
@@ -290,6 +257,7 @@ public class Account
             Class.forName(driver).newInstance();
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
+            
             result = state.executeQuery("SELECT Name FROM Accounts WHERE ActNum="+getActNum()+";");
             name = result.getString(1);
             result = state.executeQuery("SELECT Email FROM Accounts WHERE ActNum="+getActNum()+";");
@@ -299,6 +267,9 @@ public class Account
             result = state.executeQuery("SELECT Picture FROM Accounts WHERE ActNum="+getActNum()+";");
             pic = result.getString(1);
             newAct = new Account(name, email, pass, pic);
+            
+            state.close();
+            result.close();
             conn.close();
         }
         catch(SQLException se)
@@ -320,6 +291,94 @@ public class Account
     }
     
     /**
+     * Checks if an account exists in the database. If it does not exist, it is ente
+     * 
+     * @param   pass    The password to be checked.
+     *          email   The username to be checked.
+     * @return  isAct   True if the account exists, false if not.          
+     */
+    public boolean checkAccount(String email, String pass)
+    {
+        ResultSet emailResult;
+        ResultSet passResult;
+        boolean isAct = false;
+        //save info in this Account to the database
+        try
+        {
+            Class.forName(driver).newInstance();
+            Connection conn = DriverManager.getConnection(url+database,username,password);
+            Statement state = conn.createStatement();
+            emailResult = state.executeQuery("SELECT Email FROM Accounts WHERE Email="+email+";");
+            passResult = state.executeQuery("SELECT Password FROM Accounts WHERE Password="+pass+";");
+            
+            if(emailResult.getString("Email") == email && passResult.getString("Password") == pass)//if the account doesnt already exists in the database
+            {
+               isAct = true;
+            }
+            
+            else//if a new account needs to be entered into the database
+            {
+                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
+                                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
+            }
+            
+            state.close();
+            emailResult.close();
+            passResult.close();
+            conn.close();
+        }
+        catch(SQLException se)
+        {
+            while(se != null)
+            {
+                System.out.println( "State  : " + se.getSQLState()) ;
+                System.out.println( "Message: " + se.getMessage()) ;
+                System.out.println( "Error  : " + se.getErrorCode()) ;
+                se = se.getNextException();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        
+        return isAct;
+    }
+    
+    /**
+     * Creates a new account in the database with only the user's email and password.
+     */
+    private void saveNewAct()
+    {
+        
+        try
+        {
+            Class.forName(driver).newInstance();
+            Connection conn = DriverManager.getConnection(url+database,username,password);
+            Statement state = conn.createStatement();
+            
+            state.executeUpdate("INSERT INTO Accounts (ActNum, Email, Password) VALUES ("+getActNum()+"','"+getEmail()+"','"
+                            +getPassword()+"');");
+            state.close();
+            conn.close();
+        }
+        catch(SQLException se)
+        {
+            while(se != null)
+            {
+                System.out.println( "State  : " + se.getSQLState()) ;
+                System.out.println( "Message: " + se.getMessage()) ;
+                System.out.println( "Error  : " + se.getErrorCode()) ;
+                se = se.getNextException();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    
+    /**
      * Saves all the data in this Account to the database. Does not require the account ot already exist in the database.
      * If the account is not already in the database, a new entry is created with this accout's info.
      */
@@ -332,19 +391,24 @@ public class Account
             Class.forName(driver).newInstance();
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
-            result = state.executeQuery("SELECT ActNum FROM Accounts WHERE ActNum="+getActNum()+";");
+            result = state.executeQuery("SELECT ActNum FROM Accounts WHERE ActNum = "+getActNum()+";");
 
-            if(/*!result.first() || */result.getInt(1) == getActNum())//if the accounts already exists in the database
+            if(result.first() == false || result.getInt("ActNum") != getActNum())//if the account doesnt already exists in the database
+            {                    
+                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password, Picture) VALUES ("+getActNum()+
+                                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
+            }
+            
+            else//if the account exists in the database -> save email and password
             {
                 state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"', Email = '"+getEmail()+"', Password = '"+getPassword()+
                                     "', Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()+";");
+                
+                //state.executeUpdate("UPDATE Accounts SET Email = '"+getEmail()+"', Password = '"+getPassword()+
+                //                    "' WHERE ActNum = "+getActNum()+";");
             }
-            
-            else//if a new account needs to be entered into the database
-            {
-                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
-                                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
-            }
+            state.close();
+            result.close();
             conn.close();
         }
         catch(SQLException se)
@@ -377,6 +441,8 @@ public class Account
             Statement state = conn.createStatement();
 
             state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"' WHERE ActNum = "+getActNum()+";");
+            
+            state.close();
             conn.close();
         }
         catch(SQLException se)
@@ -409,6 +475,8 @@ public class Account
             Statement state = conn.createStatement();
 
             state.executeUpdate("UPDATE Accounts SET Password = '"+getPassword()+"' WHERE ActNum = "+getActNum()+";");
+            
+            state.close();
             conn.close();
         }
         catch(SQLException se)
@@ -441,6 +509,8 @@ public class Account
             Statement state = conn.createStatement();
 
             state.executeUpdate("UPDATE Accounts SET Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()+";");
+            
+            state.close();
             conn.close();
         }
         catch(SQLException se)
@@ -472,6 +542,8 @@ public class Account
             Statement state = conn.createStatement();
 
             state.executeUpdate("DELETE FROM Accounts [WHERE ActNum = "+getActNum()+"];");
+            
+            state.close();
             conn.close();
         }
         catch(SQLException se)
