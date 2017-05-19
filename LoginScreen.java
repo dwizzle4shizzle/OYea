@@ -38,6 +38,7 @@ public class LoginScreen
     //info being read
     private String username;
     private String password;
+    private Account myAccount;
     
     /**
      * @title LoginScreen() Constructor
@@ -50,6 +51,7 @@ public class LoginScreen
         loginButton.setActionCommand("login");
         createFrame();
         packFrame();
+        myAccount = null;
     }
     
     /**
@@ -140,6 +142,7 @@ public class LoginScreen
         //System.out.println("Nice");
         username = usernameField.getText();
         password = passwordField.getText();
-        System.out.println(username + "\n" + password);
+        myAccount = new Account(username, password);
+        //System.out.println(username + "\n" + password);
     }
 }
