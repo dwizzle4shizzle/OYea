@@ -41,12 +41,12 @@ public class Account
         myEmail = "";
         myPassword = "";
         myProfilePic = "";
-        myActNum = getEmail().hashCode() /10000000;
+        myActNum = getActNum();
         myRequests = new LinkedList<Account>();
         isOnline = false;
         friendList = new ArrayList();
         messages = new ArrayList();
-        saveAll();
+        //saveAll();
     }
     
     /**
@@ -55,16 +55,33 @@ public class Account
      */
     public Account(String email, String pass)
     {
-        myName = "";
         myEmail = email;
         myPassword = pass;
-        myProfilePic = "";
-        myActNum = getEmail().hashCode();
-        myRequests = new LinkedList<Account>();
-        isOnline = false;
-        friendList = new ArrayList();
-        messages = new ArrayList();
-        saveAll();
+        if(checkAccount(email, pass) == false)//if the account doesnt exist
+        {
+            saveNewAct();
+            myName = "";
+            myProfilePic = "";
+            myActNum = getActNum();
+            myRequests = new LinkedList<Account>();
+            isOnline = false;
+            friendList = new ArrayList();
+            messages = new ArrayList();
+        }   
+        else//if the acount does exist
+        {
+            Account temp = getDBInfo(getActNum());
+            myName = temp.getName();
+            myProfilePic = temp.getProfilePic();
+            myActNum = getActNum();
+            myRequests = new LinkedList<Account>();
+            isOnline = false;
+            friendList = new ArrayList();
+            messages = new ArrayList();
+            //saveAll();
+        }
+
+            
     }
     
     /**
@@ -81,7 +98,7 @@ public class Account
         myEmail = email;
         myPassword = pass;
         myProfilePic = pic;
-        myActNum = getEmail().hashCode();
+        myActNum = getActNum();
         isOnline = false;
         friendList = new ArrayList();
         messages = new ArrayList();
@@ -94,7 +111,7 @@ public class Account
      * 
      * @return  myActNum    This account's email converted to a hash code with String.hashCode().
      */
-    public int getActNum(){return myActNum;}
+    public int getActNum(){return myEmail.hashCode()/10000000;}
 
     /**
      * Accessor method for the user's name.
@@ -223,7 +240,8 @@ public class Account
     /**
      * Reads info from database and assembles it into a complete account object.
      * 
-     * @return  newAct  The account being assembled form the database info.
+     * @param   localNum    The account number who's info is being loaded.
+     * @return  newAct      The account being assembled form the database info.
      */
     private Account getDBInfo(int localNum)
     {
@@ -328,6 +346,39 @@ public class Account
     }
     
     /**
+     * Creates a new account in the database with only the user's email and password.
+     */
+    private void saveNewAct()
+    {
+        
+        try
+        {
+            Class.forName(driver).newInstance();
+            Connection conn = DriverManager.getConnection(url+database,username,password);
+            Statement state = conn.createStatement();
+            
+            state.executeUpdate("INSERT INTO Accounts (ActNum, Email, Password) VALUES ("+getActNum()+"','"+getEmail()+"','"
+                            +getPassword()+"');");
+            state.close();
+            conn.close();
+        }
+        catch(SQLException se)
+        {
+            while(se != null)
+            {
+                System.out.println( "State  : " + se.getSQLState()) ;
+                System.out.println( "Message: " + se.getMessage()) ;
+                System.out.println( "Error  : " + se.getErrorCode()) ;
+                se = se.getNextException();
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    
+    /**
      * Saves all the data in this Account to the database. Does not require the account ot already exist in the database.
      * If the account is not already in the database, a new entry is created with this accout's info.
      */
@@ -348,10 +399,13 @@ public class Account
                                     ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
             }
             
-            else//if the account exists in the database
+            else//if the account exists in the database -> save email and password
             {
                 state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"', Email = '"+getEmail()+"', Password = '"+getPassword()+
                                     "', Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()+";");
+                
+                //state.executeUpdate("UPDATE Accounts SET Email = '"+getEmail()+"', Password = '"+getPassword()+
+                //                    "' WHERE ActNum = "+getActNum()+";");
             }
             state.close();
             result.close();
