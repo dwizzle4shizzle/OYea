@@ -1,10 +1,10 @@
 #BlueJ class context
 comment0.params=
 comment0.target=LoginScreen()
-comment0.text=\n\ @title\ LoginScreen()\ Constructor\n\ @desc\ Creates\ the\ JFrame\ and\ all\ of\ it's\ contents.\n
+comment0.text=\r\n\ @title\ LoginScreen()\ Constructor\r\n\ @desc\ Creates\ the\ JFrame\ and\ all\ of\ it's\ contents.\r\n
 comment1.params=
 comment1.target=void\ createFrame()
-comment1.text=\n\ @title\ createFrame()\ method\n\ @desc\ Builds\ the\ frame\n
+comment1.text=\r\n\ @title\ createFrame()\ method\r\n\ @desc\ Builds\ the\ frame\r\n
 comment2.params=e
 comment2.target=void\ mouseClicked(java.awt.event.MouseEvent)
 comment3.params=e
@@ -13,8 +13,8 @@ comment4.params=e
 comment4.target=void\ mouseClicked(java.awt.event.MouseEvent)
 comment5.params=
 comment5.target=void\ packFrame()
-comment5.text=\n\ @title\ packFrame()\ method\n\ @desc\ Creates\ an\ instance\ of\ the\ frame\ and\ makes\ it\ visible.\n
+comment5.text=\r\n\ @title\ packFrame()\ method\r\n\ @desc\ Creates\ an\ instance\ of\ the\ frame\ and\ makes\ it\ visible.\r\n
 comment6.params=
 comment6.target=void\ readInfo()
-comment6.text=\n\ @title\ processFrame()\ method\n\ @desc\ Gets\ the\ info\ entered\ into\ the\ text\ fields\ when\ the\ login\ button\ is\ pressed.\n
+comment6.text=\r\n\ @title\ processFrame()\ method\r\n\ @desc\ Gets\ the\ info\ entered\ into\ the\ text\ fields\ when\ the\ login\ button\ is\ pressed.\r\n
 numComments=7
