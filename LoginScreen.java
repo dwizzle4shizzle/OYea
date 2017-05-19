@@ -34,6 +34,7 @@ public class LoginScreen
     private JTextField usernameField = new JTextField("Username", 20);
     private JPasswordField passwordField = new JPasswordField("Password", 20);
     private JButton loginButton = new JButton("Login");
+    private JButton newActButton = new JButton("New Account");
     
     //info being read
     private String username;
@@ -52,6 +53,7 @@ public class LoginScreen
         username = "";
         password = "";
         loginButton.setActionCommand("login");
+        newActButton.setActionCommand("newAct");
         createFrame();
         packFrame();
         myAccount = null;
@@ -102,6 +104,15 @@ public class LoginScreen
                 readInfo();
             }
         });
+        
+        newActButton.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e) 
+            {
+                readInfo();
+            }
+        });
 
         // Frame Stuff
         frame = new JFrame("Oyea - Login");
@@ -138,27 +149,38 @@ public class LoginScreen
     }
     
     /**
+     * @title newAct() method
+     * @desc Creates a new account with the new info being entered.
+     */
+    private void newAct()
+    {
+        username = usernameField.getText();
+        password = passwordField.getText();
+        myAccount = new Account(username, password);
+    }
+    
+    /**
      * @title processFrame() method
      * @desc Gets the info entered into the text fields when the login button is pressed.
      */
-    public void readInfo()
+    private void readInfo()
     {
         //System.out.println("Nice");
         username = usernameField.getText();
         password = passwordField.getText();
         //System.out.println(username+"   "+password);
-        checkInfo();
+        checkAccount();
     }
     
-    private void checkInfo()
+    private void checkAccount()
     {
-        //if(testerAccount.checkAccount(username, password))//if the entered account exists
+        if(testerAccount.checkAccount(username, password))//if the entered account exists
         {
             /*
              * log into main client
              */
         }
-        //else//if the entered account doesn't exist
+        else//if the entered account doesn't exist
         {
             /*
              * tell user account doesn't exist (pop-up window)
@@ -166,7 +188,8 @@ public class LoginScreen
             JFrame newFrame;
             Dimension screenSize;
             Container errorContent;
-            JLabel instructions = new JLabel("ONo!, that account does not exist!", JLabel.CENTER);
+            JLabel instructions = new JLabel("<html>ONo! That Username or Password is not correct!<br>Please enter a new Username"+
+                                            " or Password.<br>Or create a new account!</html>", JLabel.CENTER);
     
             
             JPanel notExist = new JPanel();
@@ -179,10 +202,10 @@ public class LoginScreen
             screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             
             newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            newFrame.setPreferredSize(new Dimension(200, 150));
-            newFrame.setMinimumSize(new Dimension(200, 150));
-            newFrame.setMaximumSize(new Dimension(200, 150));
-            newFrame.setLocation(screenSize.width / 2 - 150, screenSize.height / 2 - 250);
+            newFrame.setPreferredSize(new Dimension(325, 100));
+            newFrame.setMinimumSize(new Dimension(325, 100));
+            newFrame.setMaximumSize(new Dimension(325, 100));
+            newFrame.setLocation(screenSize.width / 2 - 125, screenSize.height / 2 - 225);
             errorContent = newFrame.getContentPane();
             errorContent.setLayout(new BorderLayout());
             
@@ -191,6 +214,8 @@ public class LoginScreen
             
             newFrame.pack();
             newFrame.setVisible(true);
+            
+            errorContent.add(notExist, BorderLayout.CENTER);
         }
     }
 }
