@@ -9,19 +9,12 @@ dependency3.from=LoginScreen
 dependency3.to=Account
 dependency3.type=UsesDependency
 objectbench.height=76
-objectbench.width=311
-package.editor.height=602
-<<<<<<< HEAD
-package.editor.width=212
-package.editor.x=456
-package.editor.y=18
-package.numDependencies=2
-=======
-package.editor.width=213
-package.editor.x=-7
+objectbench.width=340
+package.editor.height=554
+package.editor.width=242
+package.editor.x=2191
 package.editor.y=0
 package.numDependencies=3
->>>>>>> origin/master
 package.numTargets=4
 package.showExtends=true
 package.showUses=true
@@ -65,9 +58,9 @@ target3.typeParameters=
 target3.width=100
 target3.x=20
 target3.y=390
-target4.editor.height=775
-target4.editor.width=961
-target4.editor.x=326
+target4.editor.height=727
+target4.editor.width=933
+target4.editor.x=1273
 target4.editor.y=0
 target4.height=50
 target4.name=LoginScreen

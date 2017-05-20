@@ -131,6 +131,7 @@ public class LoginScreen
         login.add(usernameField);
         login.add(passwordField);
         login.add(loginButton);
+        login.add(newActButton);
         
         // Start adding panels
         content.add(logo, BorderLayout.NORTH);
