@@ -24,4 +24,5 @@ comment8.target=void\ readInfo()
 comment8.text=\r\n\ @title\ processFrame()\ method\r\n\ @desc\ Gets\ the\ info\ entered\ into\ the\ text\ fields\ when\ the\ login\ button\ is\ pressed.\r\n
 comment9.params=
 comment9.target=void\ checkAccount()
+comment9.text=\r\n\ @title\ checkAccount()\ method\r\n\ @desc\ \r\n
 numComments=10

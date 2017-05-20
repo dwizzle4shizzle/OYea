@@ -173,6 +173,10 @@ public class LoginScreen
         checkAccount();
     }
     
+    /**
+     * @title checkAccount() method
+     * @desc 
+     */
     private void checkAccount()
     {
         if(testerAccount.checkAccount(username, password))//if the entered account exists
@@ -180,6 +184,7 @@ public class LoginScreen
             /*
              * log into main client
              */
+            System.out.println("It worked!");
         }
         else//if the entered account doesn't exist
         {
