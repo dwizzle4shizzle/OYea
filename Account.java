@@ -57,7 +57,15 @@ public class Account
     {
         myEmail = email;
         myPassword = pass;
-        if(checkAccount(email, pass) == false)//if the account doesnt exist
+        myName = "";
+        myProfilePic = "";
+        myActNum = getActNum();
+        myRequests = new LinkedList<Account>();
+        isOnline = false;
+        friendList = new ArrayList();
+        messages = new ArrayList();
+        saveAll();
+        /*if(checkAccount(email, pass) == false)//if the account doesnt exist
         {
             saveNewAct();
             myName = "";
@@ -67,8 +75,9 @@ public class Account
             isOnline = false;
             friendList = new ArrayList();
             messages = new ArrayList();
-        }   
-        else//if the acount does exist
+        }
+        
+        //else//if the acount does exist
         {
             Account temp = getDBInfo(getActNum());
             myName = temp.getName();
@@ -80,6 +89,7 @@ public class Account
             messages = new ArrayList();
             //saveAll();
         }
+        */
 
             
     }
