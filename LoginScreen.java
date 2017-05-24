@@ -110,7 +110,7 @@ public class LoginScreen
             @Override
             public void mouseClicked(MouseEvent e) 
             {
-                readInfo();
+                newAct();
             }
         });
 
@@ -158,6 +158,7 @@ public class LoginScreen
         username = usernameField.getText();
         password = passwordField.getText();
         myAccount = new Account(username, password);
+        sendAccount();
     }
     
     /**
@@ -175,16 +176,15 @@ public class LoginScreen
     
     /**
      * @title checkAccount() method
-     * @desc 
+     * @desc Checks id the account exists.
      */
     private void checkAccount()
     {
         if(testerAccount.checkAccount(username, password))//if the entered account exists
         {
-            /*
-             * log into main client
-             */
-            System.out.println("It worked!");
+            //log into main client
+            sendAccount();
+            //System.out.println("It worked!");
         }
         else//if the entered account doesn't exist
         {
@@ -223,5 +223,15 @@ public class LoginScreen
             
             errorContent.add(notExist, BorderLayout.CENTER);
         }
+    }
+    
+    /**
+     * Sends the account.
+     */
+    private void sendAccount()
+    {
+        /*
+         * Sends the account object created from the login screen to the main client.
+         */
     }
 }

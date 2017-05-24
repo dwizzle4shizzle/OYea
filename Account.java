@@ -301,7 +301,7 @@ public class Account
     }
     
     /**
-     * Checks if an account exists in the database. If it does not exist, it is ente
+     * Checks if an account exists in the database.
      * 
      * @param   pass    The password to be checked.
      *          email   The username to be checked.
@@ -328,8 +328,9 @@ public class Account
             
             else//if a new account needs to be entered into the database
             {
-                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
-                                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
+                //state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
+                //                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
+                isAct = false;
             }
             
             state.close();
