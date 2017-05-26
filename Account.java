@@ -209,6 +209,14 @@ public class Account
     public void addRequest(Account newRequest){myRequests.add(newRequest);}
     
     /**
+     * Updates the friend's list.
+     */
+    public void updateFriends(ArrayList newList)
+    {
+        friendList = newList;
+    }
+    
+    /**
      * Accessor method for the user's list of friends.
      *
      * @return  friendList  A list of this user's confirmed friends.
