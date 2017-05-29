@@ -230,6 +230,7 @@ public class LoginScreen
      */
     private void sendAccount()
     {
+        System.out.println("Wowee this is the main client opening");
         /*
          * Sends the account object created from the login screen to the main client.
          */

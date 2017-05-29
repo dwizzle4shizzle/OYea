@@ -121,7 +121,7 @@ public class Account
      * 
      * @return  myActNum    This account's email converted to a hash code with String.hashCode().
      */
-    public int getActNum(){return myEmail.hashCode()/10000000;}
+    public int getActNum(){return myEmail.hashCode();}
 
     /**
      * Accessor method for the user's name.
@@ -276,13 +276,13 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
             
-            result = state.executeQuery("SELECT Name FROM Accounts WHERE ActNum="+getActNum()+";");
+            result = state.executeQuery("SELECT Name FROM Accounts WHERE ActNum="+getActNum()%251+";");
             name = result.getString(1);
-            result = state.executeQuery("SELECT Email FROM Accounts WHERE ActNum="+getActNum()+";");
+            result = state.executeQuery("SELECT Email FROM Accounts WHERE ActNum="+getActNum()%251+";");
             email = result.getString(1);
-            result = state.executeQuery("SELECT Password FROM Accounts WHERE ActNum="+getActNum()+";");
+            result = state.executeQuery("SELECT Password FROM Accounts WHERE ActNum="+getActNum()%251+";");
             pass = result.getString(1);
-            result = state.executeQuery("SELECT Picture FROM Accounts WHERE ActNum="+getActNum()+";");
+            result = state.executeQuery("SELECT Picture FROM Accounts WHERE ActNum="+getActNum()%251+";");
             pic = result.getString(1);
             newAct = new Account(name, email, pass, pic);
             
@@ -325,23 +325,25 @@ public class Account
         {
             Class.forName(driver).newInstance();
             Connection conn = DriverManager.getConnection(url+database,username,password);
-            Statement state = conn.createStatement();
-            emailResult = state.executeQuery("SELECT Email FROM Accounts WHERE Email="+email+";");
-            passResult = state.executeQuery("SELECT Password FROM Accounts WHERE Password="+pass+";");
+            Statement state1 = conn.createStatement();
+            Statement state2 = conn.createStatement();
+            emailResult = state1.executeQuery("SELECT Email FROM Accounts WHERE Email='"+email+"';");
+            passResult = state2.executeQuery("SELECT Password FROM Accounts WHERE Password='"+pass+"';");
             
-            if(emailResult.getString("Email") == email && passResult.getString("Password") == pass)//if the account doesnt already exists in the database
+            if((emailResult.first() ==true && passResult.first() == true) && (emailResult.getString("Email")).equals(email) && (passResult.getString("Password")).equals(pass))//if the account doesnt already exists in the database
             {
                isAct = true;
             }
             
-            else//if a new account needs to be entered into the database
+            else//if the account doesn't exist
             {
                 //state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password) VALUES ("+getActNum()+
                 //                    ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
                 isAct = false;
             }
             
-            state.close();
+            state1.close();
+            state2.close();
             emailResult.close();
             passResult.close();
             conn.close();
@@ -376,7 +378,7 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
             
-            state.executeUpdate("INSERT INTO Accounts (ActNum, Email, Password) VALUES ("+getActNum()+"','"+getEmail()+"','"
+            state.executeUpdate("INSERT INTO Accounts (ActNum, Email, Password) VALUES ("+getActNum()%251+"','"+getEmail()+"','"
                             +getPassword()+"');");
             state.close();
             conn.close();
@@ -410,18 +412,18 @@ public class Account
             Class.forName(driver).newInstance();
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
-            result = state.executeQuery("SELECT ActNum FROM Accounts WHERE ActNum = "+getActNum()+";");
+            result = state.executeQuery("SELECT ActNum FROM Accounts WHERE ActNum = "+getActNum()%251+";");
 
-            if(result.first() == false || result.getInt("ActNum") != getActNum())//if the account doesnt already exists in the database
+            if(result.first() == false || result.getInt("ActNum") != getActNum()%251)//if the account doesnt already exists in the database
             {                    
-                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password, Picture) VALUES ("+getActNum()+
+                state.executeUpdate("INSERT INTO Accounts (ActNum, Name, Email, Password, Picture) VALUES ("+getActNum()%251+
                                     ",'"+getName()+"','"+getEmail()+"','"+getPassword()+"','"+getProfilePic()+"');");
             }
             
             else//if the account exists in the database -> save email and password
             {
                 state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"', Email = '"+getEmail()+"', Password = '"+getPassword()+
-                                    "', Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()+";");
+                                    "', Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()%251+";");
                 
                 //state.executeUpdate("UPDATE Accounts SET Email = '"+getEmail()+"', Password = '"+getPassword()+
                 //                    "' WHERE ActNum = "+getActNum()+";");
@@ -459,7 +461,7 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
 
-            state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"' WHERE ActNum = "+getActNum()+";");
+            state.executeUpdate("UPDATE Accounts SET Name = '"+getName()+"' WHERE ActNum = "+getActNum()%251+";");
             
             state.close();
             conn.close();
@@ -493,7 +495,7 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
 
-            state.executeUpdate("UPDATE Accounts SET Password = '"+getPassword()+"' WHERE ActNum = "+getActNum()+";");
+            state.executeUpdate("UPDATE Accounts SET Password = '"+getPassword()+"' WHERE ActNum = "+getActNum()%251+";");
             
             state.close();
             conn.close();
@@ -527,7 +529,7 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
 
-            state.executeUpdate("UPDATE Accounts SET Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()+";");
+            state.executeUpdate("UPDATE Accounts SET Picture = '"+getProfilePic()+"' WHERE ActNum = "+getActNum()%251+";");
             
             state.close();
             conn.close();
@@ -560,7 +562,7 @@ public class Account
             Connection conn = DriverManager.getConnection(url+database,username,password);
             Statement state = conn.createStatement();
 
-            state.executeUpdate("DELETE FROM Accounts [WHERE ActNum = "+getActNum()+"];");
+            state.executeUpdate("DELETE FROM Accounts [WHERE ActNum = "+getActNum()%251+"];");
             
             state.close();
             conn.close();
