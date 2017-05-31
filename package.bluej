@@ -9,20 +9,35 @@ dependency3.from=LoginScreen
 dependency3.to=Account
 dependency3.type=UsesDependency
 objectbench.height=76
+<<<<<<< HEAD
 objectbench.width=292
 package.editor.height=572
 package.editor.width=194
 package.editor.x=-7
 package.editor.y=0
+=======
+objectbench.width=288
+package.editor.height=636
+package.editor.width=180
+package.editor.x=0
+package.editor.y=23
+>>>>>>> 8e2a77aad326d7a9c976bda9a53af1234dd4bf7c
 package.numDependencies=3
 package.numTargets=4
 package.showExtends=true
 package.showUses=true
 project.charset=UTF-8
+<<<<<<< HEAD
 target1.editor.height=706
 target1.editor.width=1296
 target1.editor.x=1272
 target1.editor.y=-8
+=======
+target1.editor.height=775
+target1.editor.width=971
+target1.editor.x=309
+target1.editor.y=23
+>>>>>>> 8e2a77aad326d7a9c976bda9a53af1234dd4bf7c
 target1.height=50
 target1.name=Account
 target1.naviview.expanded=false
@@ -58,10 +73,17 @@ target3.typeParameters=
 target3.width=100
 target3.x=20
 target3.y=390
+<<<<<<< HEAD
 target4.editor.height=745
 target4.editor.width=980
 target4.editor.x=307
 target4.editor.y=0
+=======
+target4.editor.height=775
+target4.editor.width=994
+target4.editor.x=20
+target4.editor.y=173
+>>>>>>> 8e2a77aad326d7a9c976bda9a53af1234dd4bf7c
 target4.height=50
 target4.name=LoginScreen
 target4.naviview.expanded=false
